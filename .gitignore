@@ -1,0 +1,5 @@
+.vscode/
+.idea/
+*.mti
+*.mpf
+*.wlf
