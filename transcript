@@ -1,0 +1,68 @@
+# Compile of pompa.vhd failed with 3 errors.
+# Compile of pompa.vhd was successful.
+# Compile of pompa.vhd was successful.
+# Compile of pompa.vhd failed with 3 errors.
+# Compile of pompa.vhd failed with 3 errors.
+# Compile of pompa.vhd was successful.
+# Compile of pompa.vhd was successful.
+vsim -gui work.pompa
+# vsim -gui work.pompa 
+# Start time: 17:44:22 on Dec 03,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.pompa(behavioral)
+add wave -position insertpoint sim:/pompa/*
+force -freeze sim:/pompa/luas_pompa 010 0
+force -freeze sim:/pompa/luas_pompa 010 0
+force -freeze sim:/pompa/kecepatan_air 010 0
+force -freeze sim:/pompa/clk 1 0, 0 {50 ps} -r 100
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 100 ps  Iteration: 0  Instance: /pompa
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 100 ps  Iteration: 0  Instance: /pompa
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 200 ps  Iteration: 0  Instance: /pompa
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 300 ps  Iteration: 0  Instance: /pompa
+# Compile of pompa.vhd failed with 2 errors.
+# Compile of pompa.vhd failed with 1 errors.
+# Compile of pompa.vhd was successful.
+vsim -gui work.pompa
+# End time: 17:49:00 on Dec 03,2024, Elapsed time: 0:04:38
+# Errors: 0, Warnings: 15
+# vsim -gui work.pompa 
+# Start time: 17:49:00 on Dec 03,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.pompa(behavioral)
+add wave -position insertpoint sim:/pompa/*
+force -freeze sim:/pompa/clk 1 0, 0 {50 ps} -r 100
+force -freeze sim:/pompa/kecepatan_air 010 0
+force -freeze sim:/pompa/luas_pompa 010 0
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 100 ps  Iteration: 0  Instance: /pompa
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 200 ps  Iteration: 0  Instance: /pompa
+force -freeze sim:/pompa/delivery_head 001 0
+run
+run
+run
+run
+run
+run
+run
+run
+# Compile of pompa.vhd failed with 6 errors.
+# Compile of pompa.vhd failed with 6 errors.
+# Compile of pompa.vhd was successful with warnings.
+# Compile of pompa.vhd was successful with warnings.
+# Compile of pompa.vhd was successful with warnings.
