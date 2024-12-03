@@ -3,3 +3,6 @@
 *.mti
 *.mpf
 *.wlf
+*.vstf/
+*.wlf
+work/
