@@ -5,14 +5,15 @@ use IEEE.numeric_std.all;
 entity pompa is
     port (
         signal clk : in std_logic;
-        
+        signal alarm : out std_logic;
+        signal pompa : inout std_logic;
+        signal tank_state : in std_logic_vector(1 downto 0);
+        signal luas_pompa : in integer;
     );
 end entity pompa;
 
-architecture rtl of pompa is
-    
+architecture Behavioral of pompa is
+    -- variable" disini buat rumus
 begin
     
-    
-    
-end architecture rtl;
+end architecture Behavioral;
