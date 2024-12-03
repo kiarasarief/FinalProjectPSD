@@ -1,0 +1,34 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity Tank is
+    Port (
+        LEVEL        : in std_logic_vector(1 downto 0); -- 00: LOW, 01: NORMAL, 10: HIGH
+        TEMPERATURE  : in integer range 0 to 100;       -- Input suhu air
+        TIMER        : in integer range 0 to 100;       -- Waktu di LOW_LEVEL
+        ALARM        : out std_logic_vector(3 downto 0) -- Alarm output
+    );
+end Tank;
+
+architecture Behavioral of Tank is
+    signal ALARM_TRIGGER : std_logic := '0'; -- Status alarm
+begin
+    process(LEVEL, TEMPERATURE, TIMER)
+    begin
+        -- Kondisi alarm
+        if LEVEL = "00" and TIMER > 30 then
+            ALARM_TRIGGER <= '1'; -- Alarm aktif
+        else
+            ALARM_TRIGGER <= '0'; -- Alarm mati
+        end if;
+
+        -- Output alarm
+        if ALARM_TRIGGER = '1' then
+            ALARM <= "1111"; -- Alarm aktif
+        else
+            ALARM <= "0000"; -- Alarm mati
+        end if;
+    end process;
+end Behavioral;
