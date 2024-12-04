@@ -12,7 +12,7 @@ ENTITY pompa IS
         SIGNAL kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
         SIGNAL delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
         SIGNAL efisiensi : OUT STD_LOGIC_VECTOR(19 DOWNTO 0); --sementara 5 bit
-        SIGNAL debit : OUT STD_LOGIC_VECTOR(5 DOWNTO 0) --sementara 5 bit
+        SIGNAL debit : OUT STD_LOGIC_VECTOR(5 DOWNTO 0); --sementara 5 bit
         SIGNAL kegiatan_pompa : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) --sementara 2 bit
     );
 END ENTITY pompa;
@@ -59,10 +59,12 @@ BEGIN
                 IF alarm = '1' AND current_state = GABUT THEN
                     pump_state <= '1';
                     current_state <= MENGISI;
+                    kegiatan_pompa <= "01";
                 END IF;
             ELSIF enable_pompa = '0' THEN
                 REPORT "Pompa mati! Hidupkan dulu bos" SEVERITY warning;
                 current_state <= GABUT;
+                kegiatan_pompa <= "00";
             END IF;
 
             internal_debit := unsigned(luas_pompa) * unsigned(kecepatan_air);
@@ -78,8 +80,6 @@ BEGIN
             debit <= STD_LOGIC_VECTOR(internal_debit);
 
             efisiensi <= STD_LOGIC_VECTOR(to_unsigned(efisiensi_temp, 20)); -- scaled integer
-
-            kegiatan_pompa <= current_state;
         END IF;
     END PROCESS;
 END ARCHITECTURE Behavioral;
