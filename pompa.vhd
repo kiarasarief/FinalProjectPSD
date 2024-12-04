@@ -6,7 +6,7 @@ ENTITY pompa IS
     PORT (
         SIGNAL clk : IN STD_LOGIC;
         SIGNAL alarm : IN STD_LOGIC;
-        SIGNAL pompa : INOUT STD_LOGIC;
+        SIGNAL enable_pompa : INOUT STD_LOGIC;
         SIGNAL pump_state : OUT STD_LOGIC; --tracking state pump, buat tim Tangki silakan output ini jadi input buat tangki
         SIGNAL luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         SIGNAL kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
@@ -54,12 +54,12 @@ BEGIN
         VARIABLE koma : INTEGER;
     BEGIN
         IF falling_edge(clk) THEN
-            IF pompa = '1' THEN
+            IF enable_pompa = '1' THEN
                 IF alarm = '1' AND current_state = GABUT THEN
                     pump_state <= '1';
                     current_state <= MENGISI;
                 END IF;
-            ELSIF pompa = '0' THEN
+            ELSIF enable_pompa = '0' THEN
                 REPORT "Pompa mati! Hidupkan dulu bos" SEVERITY warning;
                 current_state <= GABUT;
             END IF;
