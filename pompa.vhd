@@ -5,9 +5,9 @@ USE IEEE.numeric_std.ALL;
 ENTITY pompa IS
     PORT (
         SIGNAL clk : IN STD_LOGIC;
-        SIGNAL alarm : OUT STD_LOGIC;
+        SIGNAL alarm : IN STD_LOGIC;
         SIGNAL pompa : INOUT STD_LOGIC;
-        SIGNAL tank_state : IN STD_LOGIC_VECTOR(1 DOWNTO 0); --tracking state tangki
+        SIGNAL pump_state : OUT STD_LOGIC; --tracking state pump, buat tim Tangki silakan output ini jadi input buat tangki
         SIGNAL luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         SIGNAL kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
         SIGNAL delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
@@ -22,21 +22,61 @@ ARCHITECTURE Behavioral OF pompa IS
     SIGNAL daya : unsigned(10 DOWNTO 0) := "11111010000"; -- 2000 Watt
     SIGNAL densitas : unsigned(10 DOWNTO 0) := "01111101000"; -- 1000 kg/m^3
     SIGNAL faktor_pembagi : UNSIGNED(8 DOWNTO 0) := "101101001"; -- 367
-
+    TYPE StateType IS (MENGISI, GABUT);
+    SIGNAL current_state : StateType := GABUT;
 BEGIN
+    -- PROCESS (clk, kecepatan_air, luas_pompa, delivery_head)
+    --     VARIABLE internal_debit : unsigned(5 DOWNTO 0); -- internal signal buat debitnya
+    --     VARIABLE efisiensi_temp : INTEGER;-- internal signal buat efisiensi
+    --     variable koma : integer;
+    -- BEGIN
+    --     IF rising_edge(clk) THEN
+    --         internal_debit := unsigned(luas_pompa) * unsigned(kecepatan_air);
+    --         efisiensi_temp := to_integer((unsigned(internal_debit) * unsigned(delivery_head) * unsigned(densitas) * 10000) / (367 * unsigned(daya))); -- scale by 1000
+    --         koma := efisiensi_temp mod 100;
+
+    --         if koma > 50 then
+    --             efisiensi_temp := efisiensi_temp + 100;
+    --         end if;
+
+    --         efisiensi_temp := efisiensi_temp / 100;
+
+    --         debit <= STD_LOGIC_VECTOR(internal_debit);
+
+    --         efisiensi <= STD_LOGIC_VECTOR(to_unsigned(efisiensi_temp, 20)); -- scaled integer
+
+    --     END IF;
+    -- END PROCESS;
+
     PROCESS (clk, kecepatan_air, luas_pompa, delivery_head)
         VARIABLE internal_debit : unsigned(5 DOWNTO 0); -- internal signal buat debitnya
         VARIABLE efisiensi_temp : INTEGER;-- internal signal buat efisiensi
-
+        VARIABLE koma : INTEGER;
     BEGIN
-        IF rising_edge(clk) THEN
+        IF falling_edge(clk) THEN
+            IF pompa = '1' THEN
+                IF alarm = '1' AND current_state = GABUT THEN
+                    pump_state <= '1';
+                    current_state <= MENGISI;
+                END IF;
+            ELSIF pompa = '0' THEN
+                REPORT "Pompa mati! Hidupkan dulu bos" SEVERITY warning;
+                current_state <= GABUT;
+            END IF;
+
             internal_debit := unsigned(luas_pompa) * unsigned(kecepatan_air);
-            efisiensi_temp := to_integer((unsigned(internal_debit) * unsigned(delivery_head) * unsigned(densitas) * 100) / (367 * unsigned(daya))); -- scale by 1000
+            efisiensi_temp := to_integer((unsigned(internal_debit) * unsigned(delivery_head) * unsigned(densitas) * 10000) / (367 * unsigned(daya))); -- scale by 1000
+            koma := efisiensi_temp MOD 100;
+
+            IF koma > 50 THEN
+                efisiensi_temp := efisiensi_temp + 100;
+            END IF;
+
+            efisiensi_temp := efisiensi_temp / 100;
 
             debit <= STD_LOGIC_VECTOR(internal_debit);
 
             efisiensi <= STD_LOGIC_VECTOR(to_unsigned(efisiensi_temp, 20)); -- scaled integer
-
         END IF;
     END PROCESS;
 END ARCHITECTURE Behavioral;
