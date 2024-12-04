@@ -13,6 +13,7 @@ ENTITY top_level IS
         pump_state : OUT STD_LOGIC;
         efisiensi : OUT STD_LOGIC_VECTOR(19 DOWNTO 0);
         debit : OUT STD_LOGIC_VECTOR(5 DOWNTO 0)
+        kegiatan_pompa : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
     );
 END ENTITY top_level;
 
@@ -28,8 +29,12 @@ ARCHITECTURE rtl OF top_level IS
             delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
             efisiensi : OUT STD_LOGIC_VECTOR(19 DOWNTO 0);
             debit : OUT STD_LOGIC_VECTOR(5 DOWNTO 0)
+            kegiatan_pompa : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
         );
     END COMPONENT;
+
+    type StateType IS (MENGISI, GABUT);
+    signal current_state : StateType;
 BEGIN
     u_pompa : pompa
     PORT MAP(
@@ -42,5 +47,6 @@ BEGIN
         delivery_head => delivery_head,
         efisiensi => efisiensi,
         debit => debit
+        kegiatan_pompa => kegiatan_pompa
     );
 END ARCHITECTURE rtl;
