@@ -48,4 +48,17 @@ begin
                     alarm <= '0';  -- Reset alarm
                 when "11" =>  -- HIGH level
                     current_level <= "11";  -- Set current level ke HIGH
-                    alarm
+                    alarm_timer <= 0;  -- Reset timer
+                    alarm <= '0';  -- Reset alarm
+                when others =>
+                    -- Jika nilai level tidak valid, tetap di level rendah
+                    current_level <= "00"; 
+            end case;
+
+            -- Output level_tank sesuai status current_level
+            level_tank <= current_level;
+
+        end if;
+    end process;
+
+end behavioral;
