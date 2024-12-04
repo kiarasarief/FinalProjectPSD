@@ -1,6 +1,8 @@
-# "Judul Proyek"
+# "Water Level Monitoring System using FSM"
 ---
-(Deskripsi singkat proyek)
+
+
+**Water Level Monitoring System** adalah sistem berbasis logika digital yang dirancang untuk memantau dan mengontrol tingkat ketinggian air dalam tangki menggunakan prinsip Finite State Machine (FSM). Sistem ini menerima input berupa tingkat ketinggian air (Low, Normal, High) dan mengatur pompa serta alarm sesuai dengan kondisi tersebut. Pompa aktif saat tingkat air rendah, dan mati saat air mencapai level normal atau tinggi. Selain itu, sistem ini juga memonitor suhu dan flow rate untuk mendeteksi potensi kerusakan pada pompa, serta menghitung efisiensi pompa berdasarkan rumus yang melibatkan flow rate, delivery head, dan faktor konversi. Dengan pendekatan ini, sistem dapat memberikan kontrol otomatis serta deteksi dini terhadap potensi masalah pada pompa, meningkatkan efisiensi dan keandalan sistem pengisian air.
 
 ### Latar Belakang
 
