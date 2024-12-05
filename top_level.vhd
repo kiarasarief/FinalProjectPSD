@@ -11,7 +11,7 @@ ENTITY top_level IS
         luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        pump_state : OUT STD_LOGIC;
+        pump_state : INOUT STD_LOGIC;
         efisiensi : OUT STD_LOGIC_VECTOR(19 DOWNTO 0);
         debit : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
         kegiatan_pompa : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -35,7 +35,7 @@ ARCHITECTURE rtl OF top_level IS
             clk : IN STD_LOGIC;
             alarm_pompa : IN STD_LOGIC;
             enable_pompa : INOUT STD_LOGIC;
-            pump_state : OUT STD_LOGIC;
+            pump_state : INOUT STD_LOGIC;
             luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
             kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
             delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -89,9 +89,9 @@ BEGIN
     process(clk)
     begin
         if falling_edge(clk) then
-            if kegiatan_pompa = "00" and current_state = GABUT then
+            if pump_state = '1' then
                 current_state <= MENGISI;
-            elsif kegiatan_pompa = "01" and current_state = MENGISI then
+            elsif pump_state ='0' then
                 current_state <= GABUT;
             end if;
         end if;
