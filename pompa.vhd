@@ -7,7 +7,7 @@ ENTITY pompa IS
         SIGNAL clk : IN STD_LOGIC;
         SIGNAL alarm_pompa : IN STD_LOGIC;
         SIGNAL enable_pompa : INOUT STD_LOGIC;
-        SIGNAL pump_state : OUT STD_LOGIC; --tracking state pump, buat tim Tangki silakan output ini jadi input buat tangki
+        SIGNAL pump_state : INOUT STD_LOGIC; --tracking state pump, buat tim Tangki silakan output ini jadi input buat tangki
         SIGNAL luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         SIGNAL kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
         SIGNAL delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
