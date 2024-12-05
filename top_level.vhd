@@ -7,7 +7,7 @@ ENTITY top_level IS
         --pump
         clk : IN STD_LOGIC;
         alarm : INOUT STD_LOGIC;
-        enable_pompa : INOUT STD_LOGIC;
+        enable_pompa : IN STD_LOGIC;
         luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -34,7 +34,7 @@ ARCHITECTURE rtl OF top_level IS
         PORT (
             clk : IN STD_LOGIC;
             alarm_pompa : IN STD_LOGIC;
-            enable_pompa : INOUT STD_LOGIC;
+            enable_pompa : IN STD_LOGIC;
             pump_state : INOUT STD_LOGIC;
             luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
             kecepatan_air : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
