@@ -12,7 +12,7 @@ entity Tank is
 
         -- Outputs
         level_tank : out STD_LOGIC_VECTOR(1 downto 0); -- Menunjukkan level air
-        alarm : out STD_LOGIC;       -- Alarm (1 = menyala, 0 = mati)
+        alarm_tank : out STD_LOGIC;       -- Alarm (1 = menyala, 0 = mati)
         temp : out STD_LOGIC_VECTOR(6 downto 0)        -- Output suhu air (7-bit)
     );
 end Tank;
@@ -37,19 +37,19 @@ begin
                     for i in 0 to 5 loop
                         if alarm_timer < 5 then
                             alarm_timer <= alarm_timer + 1;
-                            alarm <= '0';  -- Alarm mati selama timer belum mencapai 5 detik
+                            alarm_tank <= '0';  -- Alarm mati selama timer belum mencapai 5 detik
                         else
-                            alarm <= '1';  -- Alarm menyala setelah 5 detik
+                            alarm_tank <= '1';  -- Alarm menyala setelah 5 detik
                         end if;
                     end loop;
                 when "01" =>  -- NORMAL level
                     current_level <= "01";  -- Set current level ke NORMAL
                     alarm_timer <= 0;  -- Reset timer
-                    alarm <= '0';  -- Reset alarm
+                    alarm_tank <= '0';  -- Reset alarm
                 when "11" =>  -- HIGH level
                     current_level <= "11";  -- Set current level ke HIGH
                     alarm_timer <= 0;  -- Reset timer
-                    alarm <= '0';  -- Reset alarm
+                    alarm_tank <= '0';  -- Reset alarm
                 when others =>
                     -- Jika nilai level tidak valid, tetap di level rendah
                     current_level <= "00"; 

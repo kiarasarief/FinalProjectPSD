@@ -5,7 +5,7 @@ USE IEEE.numeric_std.ALL;
 ENTITY pompa IS
     PORT (
         SIGNAL clk : IN STD_LOGIC;
-        SIGNAL alarm : IN STD_LOGIC;
+        SIGNAL alarm_pompa : IN STD_LOGIC;
         SIGNAL enable_pompa : INOUT STD_LOGIC;
         SIGNAL pump_state : OUT STD_LOGIC; --tracking state pump, buat tim Tangki silakan output ini jadi input buat tangki
         SIGNAL luas_pompa : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -13,7 +13,7 @@ ENTITY pompa IS
         SIGNAL delivery_head : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --sementara 3 bit
         SIGNAL efisiensi : OUT STD_LOGIC_VECTOR(19 DOWNTO 0); --sementara 5 bit
         SIGNAL debit : OUT STD_LOGIC_VECTOR(5 DOWNTO 0); --sementara 5 bit
-        SIGNAL kegiatan_pompa : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) --sementara 2 bit
+        SIGNAL kegiatan_pompa : INOUT STD_LOGIC_VECTOR(1 DOWNTO 0) --sementara 2 bit
     );
 END ENTITY pompa;
 
@@ -56,15 +56,22 @@ BEGIN
     BEGIN
         IF falling_edge(clk) THEN
             IF enable_pompa = '1' THEN
-                IF alarm = '1' AND current_state = GABUT THEN
+                if current_state = MENGISI then
                     pump_state <= '1';
-                    current_state <= MENGISI;
                     kegiatan_pompa <= "01";
-                END IF;
+                    if alarm_pompa = '0' then
+                        current_state <= GABUT;
+                    end if;
+                elsif current_state = GABUT then
+                    pump_state <= '0';
+                    kegiatan_pompa <= "00";
+                    if alarm_pompa = '1' then
+                        current_state <= MENGISI;
+                    end if;
+                end if;
             ELSIF enable_pompa = '0' THEN
                 REPORT "Pompa mati! Hidupkan dulu bos" SEVERITY warning;
                 current_state <= GABUT;
-                kegiatan_pompa <= "00";
             END IF;
 
             internal_debit := unsigned(luas_pompa) * unsigned(kecepatan_air);
