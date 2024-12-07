@@ -1,5 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use std.textio.all;
 
 entity tb_top_level is
 end tb_top_level;
@@ -44,6 +46,9 @@ architecture tb of tb_top_level is
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 
+    -- File handling
+    file output_file: text;
+
 begin
 
     -- Instantiate the device under test (DUT)
@@ -63,11 +68,41 @@ begin
               level_tank     => level_tank,
               temp           => temp);
 
-    -- Clock generation: toggle every half period
+    -- Clock generation
     TbClock <= not TbClock after TbPeriod / 2 when TbSimEnded /= '1' else '0';
-
-    -- Assigning clock to the DUT clock input
     clk <= TbClock;
+
+    -- File writing process
+    file_writer: process
+        variable line_out: line;
+        variable simulation_time: time;
+    begin
+        -- Open the output file
+        file_open(output_file, "pump_output.txt", write_mode);
+        
+        -- Write header
+        write(line_out, string'("Time(ns), Debit, Efisiensi"));
+        writeline(output_file, line_out);
+        
+        while TbSimEnded /= '1' loop
+            wait for TbPeriod;  -- Sample every clock period
+            
+            -- Get current simulation time
+            simulation_time := now;
+            
+            -- Create output line with time, debit, and efisiensi
+            write(line_out, simulation_time);
+            write(line_out, string'(", "));
+            write(line_out, to_integer(unsigned(debit)));
+            write(line_out, string'(", "));
+            write(line_out, to_integer(unsigned(efisiensi)));
+            writeline(output_file, line_out);
+        end loop;
+        
+        -- Close the file
+        file_close(output_file);
+        wait;
+    end process;
 
     -- Stimuli process
     stimuli : process
@@ -80,29 +115,29 @@ begin
         level <= "00";               -- Start at low level
         temp_input <= "1001010";     -- Example temperature input (75 in decimal)
 
-        -- Stimulus 1: Test with LOW level water, system should activate pump after a delay
+        -- Stimulus 1: Test with LOW level water
         wait for 10 * TbPeriod;
 
-        -- Stimulus 2: Test with NORMAL level water, pump should stop
-        level <= "01";               -- Normal level input
+        -- Stimulus 2: Test with NORMAL level water
+        level <= "01";               
         wait for 10 * TbPeriod;
 
-        -- Stimulus 3: Test with HIGH level water, pump should still be off
-        level <= "11";               -- High level input
+        -- Stimulus 3: Test with HIGH level water
+        level <= "11";               
         wait for 10 * TbPeriod;
 
         -- Stimulus 4: Test with different temperature
-        temp_input <= "1100001";     -- Example temperature input (97 in decimal)
+        temp_input <= "1100001";     
         wait for 10 * TbPeriod;
 
         -- Stimulus 5: Test pump off condition
-        enable_pompa <= '0';         -- Disable pump
-        level <= "00";               -- Low level input again to check if pump stays off
+        enable_pompa <= '0';         
+        level <= "00";               
         wait for 10 * TbPeriod;
 
         -- Stimulus 6: Re-enable pump and simulate different conditions
-        enable_pompa <= '1';         -- Enable pump again
-        level <= "01";               -- Normal level input
+        enable_pompa <= '1';         
+        level <= "01";               
         wait for 10 * TbPeriod;
 
         -- Stop the simulation
@@ -112,7 +147,7 @@ begin
 
 end tb;
 
--- Configuration block for simulator compatibility
+-- Configuration block
 configuration cfg_tb_top_level of tb_top_level is
     for tb
     end for;
