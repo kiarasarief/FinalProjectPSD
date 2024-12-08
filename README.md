@@ -84,7 +84,15 @@ Komponen Top-Level bertindak sebagai penghubung antara tangki dan pompa. Alarm d
 Terakhir, hasil simulasi dicatat dalam file **.txt** melalui proses yang dilakukan di testbench. File ini mencatat waktu simulasi (Time(ns)), debit air, dan efisiensi pompa menggunakan library TEXTIO di VHDL. Data ini berfungsi sebagai hasil pengujian untuk memastikan bahwa sistem bekerja sesuai desain dan dapat digunakan untuk analisis lebih lanjut.
 
 ## Testing
-(Deskripsi testing & lampiran simulasi)
+### Sintesis
+![picture 0](https://i.imgur.com/8n1CU7w.png)  
+
+
+### Waveform
+![picture 1](https://i.imgur.com/px78TU2.png)  
+
+### .txt
+![picture 2](https://i.imgur.com/RHqWmUP.png)  
 
 ## Kontributor
 - @sleepingpolice-afk
